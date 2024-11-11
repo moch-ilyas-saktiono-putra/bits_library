@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model buku {
+  id_buku          Int                @id @default(autoincrement())
+  judul_buku       String             @db.VarChar(255)
+  pengarang        String?            @db.VarChar(255)
+  penerbit         String?            @db.VarChar(255)
+  tahun_terbit     String?
+  kategori         String?            @db.VarChar(100)
+  isbn             String?            @db.VarChar(20)
+  status_pinjaman  Boolean?           @default(false)
+  foto_buku        String?            @db.VarChar(255)
+  transaksi_pinjam transaksi_pinjam[]
+}
+
+model member {
+  id_member         Int                @id @default(autoincrement())
+  nama_member       String             @db.VarChar(255)
+  alamat            String?            @db.VarChar(255)
+  no_telepon        String?            @db.VarChar(20)
+  email             String?            @unique(map: "email") @db.VarChar(100)
+  tanggal_bergabung DateTime?          @db.Date
+  foto_member       String?            @db.VarChar(255)
+  transaksi_pinjam  transaksi_pinjam[]
+}
+
+model transaksi_pengembalian {
+  id_transaksi_pengembalian Int               @id @default(autoincrement())
+  id_transaksi_pinjam       Int?
+  tanggal_pengembalian      DateTime?         @db.Date
+  denda                     Decimal?          @default(0.00) @db.Decimal(10, 2)
+  transaksi_pinjam          transaksi_pinjam? @relation(fields: [id_transaksi_pinjam], references: [id_transaksi_pinjam], onDelete: Restrict, onUpdate: Restrict, map: "transaksi_pengembalian_ibfk_1")
+
+  @@index([id_transaksi_pinjam], map: "id_transaksi_pinjam")
+}
+
+model transaksi_pinjam {
+  id_transaksi_pinjam    Int                      @id @default(autoincrement())
+  id_member              Int?
+  id_buku                Int?
+  tanggal_pinjam         DateTime?                @db.Date
+  tanggal_jatuh_tempo    DateTime?                @db.Date
+  status_pinjam          Boolean?                 @default(true)
+  transaksi_pengembalian transaksi_pengembalian[]
+  member                 member?                  @relation(fields: [id_member], references: [id_member], onDelete: Restrict, onUpdate: Restrict, map: "transaksi_pinjam_ibfk_1")
+  buku                   buku?                    @relation(fields: [id_buku], references: [id_buku], onDelete: Restrict, onUpdate: Restrict, map: "transaksi_pinjam_ibfk_2")
+
+  @@index([id_buku], map: "id_buku")
+  @@index([id_member], map: "id_member")
+}
