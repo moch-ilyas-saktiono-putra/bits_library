@@ -1,6 +1,8 @@
 // Library
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const path = require('path')
+const fs = require('fs')
 
 exports.saveBook = async (req, res) => {
   const {
@@ -104,7 +106,7 @@ exports.updateBookById = async (req, res) => {
     status_pinjaman,
   } = req.body;
 
-  const updateData = {}
+  const updateData = {};
 
   try {
     const bookData = await prisma.buku.findUnique({
@@ -170,7 +172,23 @@ exports.updateBookById = async (req, res) => {
 };
 
 exports.deleteBookById = async (req, res) => {
-  const bookId = req.params.id
+  const bookId = req.params.id;
 
+  try {
+    const deleteData = await prisma.buku.delete({
+      where: {
+        id_buku: Number(bookId),
+      },
+    });
 
-}
+    return res.status(200).json({
+      message: "Book successfully deleted",
+    });
+  } catch (error) {
+    console.log("Error deleting book:", error);
+    return res.status(500).json({
+      message: "There was an error deleting the book",
+      error: error.message,
+    });
+  }
+};

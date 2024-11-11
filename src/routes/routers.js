@@ -23,5 +23,6 @@ router.get("/book", bookControllers.getAllBook);
 router.get("/book/:id", bookControllers.getBookById);
 router.post("/book", uploadImage.single("foto_buku"), bookControllers.saveBook);
 router.put("/book/:id", uploadImage.single('foto_buku'),bookControllers.updateBookById);
+router.delete("/book/:id", bookControllers.deleteBookById);
 
 module.exports = router;
