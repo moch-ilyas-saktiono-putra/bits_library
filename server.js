@@ -1,10 +1,12 @@
 const express = require("express");
-const multer = require("multer");
+const path = require('path')
 
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json()); // Versi lebih bersih tanpa parameter kosong
+app.use(express.json()); 
+
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 const PORT = 8080;
 

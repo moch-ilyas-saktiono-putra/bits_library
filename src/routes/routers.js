@@ -22,5 +22,6 @@ const uploadImage = multer({ storage: fileStorage });
 router.get("/book", bookControllers.getAllBook);
 router.get("/book/:id", bookControllers.getBookById);
 router.post("/book", uploadImage.single("foto_buku"), bookControllers.saveBook);
+router.put("/book/:id", uploadImage.single('foto_buku'),bookControllers.updateBookById);
 
 module.exports = router;

@@ -69,9 +69,13 @@ exports.getBookById = async (req, res) => {
     });
 
     if (bookData) {
+      const imageUrl = `${req.protocol}://${req.get("host")}/${
+        bookData.foto_buku
+      }`;
+
       return res.status(200).json({
         message: "Book found successfully",
-        data: bookData,
+        data: { bookData, foto_buku: imageUrl },
       });
     }
 
@@ -86,3 +90,87 @@ exports.getBookById = async (req, res) => {
     });
   }
 };
+
+exports.updateBookById = async (req, res) => {
+  const bookId = req.params.id;
+
+  const {
+    judul_buku,
+    pengarang,
+    penerbit,
+    tahun_terbit,
+    kategori,
+    isbn,
+    status_pinjaman,
+  } = req.body;
+
+  const updateData = {}
+
+  try {
+    const bookData = await prisma.buku.findUnique({
+      where: { id_buku: Number(bookId) },
+    });
+
+    if (!bookData) {
+      return res.status(404).json({
+        message: "Book not found",
+      });
+    }
+
+    if (judul_buku) {
+      updateData.judul_buku = judul_buku;
+    }
+
+    if (pengarang) {
+      updateData.pengarang = pengarang;
+    }
+
+    if (penerbit) {
+      updateData.penerbit = penerbit;
+    }
+
+    if (tahun_terbit) {
+      updateData.tahun_terbit = tahun_terbit;
+    }
+
+    if (kategori) {
+      updateData.kategori = kategori;
+    }
+
+    if (isbn) {
+      updateData.isbn = isbn;
+    }
+
+    if (status_pinjaman) {
+      updateData.status_pinjaman = status_pinjaman;
+    }
+
+    if (req.file) {
+      updateData.foto_buku = req.file.path;
+    }
+
+    const updatedBook = await prisma.buku.update({
+      where: {
+        id_buku: Number(bookId),
+      },
+      data: updateData,
+    });
+
+    return res.status(200).json({
+      message: "Book successfully updated",
+      data: updatedBook,
+    });
+  } catch (error) {
+    console.log("Error updating book:", error);
+    return res.status(500).json({
+      message: "There was an error updating the book data",
+      error: error.message,
+    });
+  }
+};
+
+exports.deleteBookById = async (req, res) => {
+  const bookId = req.params.id
+
+
+}
