@@ -26,7 +26,7 @@ model member {
   alamat            String?            @db.VarChar(255)
   no_telepon        String?            @db.VarChar(20)
   email             String?            @unique(map: "email") @db.VarChar(100)
-  tanggal_bergabung DateTime?          @db.Date
+  tanggal_bergabung DateTime?          @default(now()) @db.Date
   foto_member       String?            @db.VarChar(255)
   transaksi_pinjam  transaksi_pinjam[]
 }

@@ -4,6 +4,7 @@ const prisma = new PrismaClient();
 const path = require('path')
 const fs = require('fs')
 
+// Save Book
 exports.saveBook = async (req, res) => {
   const {
     judul_buku,
@@ -44,6 +45,7 @@ exports.saveBook = async (req, res) => {
   }
 };
 
+// Get all book
 exports.getAllBook = async (req, res) => {
   try {
     const bookData = await prisma.buku.findMany();
@@ -61,6 +63,7 @@ exports.getAllBook = async (req, res) => {
   }
 };
 
+// Get detail book
 exports.getBookById = async (req, res) => {
   const bookId = req.params.id;
   try {
@@ -93,6 +96,7 @@ exports.getBookById = async (req, res) => {
   }
 };
 
+// Update book
 exports.updateBookById = async (req, res) => {
   const bookId = req.params.id;
 
@@ -171,6 +175,7 @@ exports.updateBookById = async (req, res) => {
   }
 };
 
+// Delete book
 exports.deleteBookById = async (req, res) => {
   const bookId = req.params.id;
 
