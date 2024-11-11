@@ -44,7 +44,9 @@ model transaksi_pengembalian {
 model transaksi_pinjam {
   id_transaksi_pinjam    Int                      @id @default(autoincrement())
   id_member              Int?
+  nama_member            String?                  @db.VarChar(255) 
   id_buku                Int?
+  judul_buku             String?                  @db.VarChar(255)
   tanggal_pinjam         DateTime?                @db.Date
   tanggal_jatuh_tempo    DateTime?                @db.Date
   status_pinjam          Boolean?                 @default(true)
