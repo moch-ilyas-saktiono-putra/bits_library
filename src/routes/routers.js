@@ -51,9 +51,9 @@ router.delete("/member/:id", memberControllers.deleteMemberById);
 router.get("/pinjam", pinjamControllers.getAllPinjaman);
 router.get("/pinjam/:id", pinjamControllers.getPinjamanById);
 router.get(
-  "/pinjamreport",
+  "/reportpeminjaman",
   upload.single("none"),
-  pinjamControllers.peminjamanDailyReport
+  pinjamControllers.peminjamanReport
 );
 router.post(
   "/pinjam",
@@ -62,8 +62,9 @@ router.post(
 );
 
 // Pengembalian routers
-router.get("/pengembalian", pengembalianControllers.getAllPengembalian)
-router.get("/pengembalian/:id", pengembalianControllers.getPengembalianById)
+router.get("/pengembalian", pengembalianControllers.getAllPengembalian);
+router.get("/pengembalian/:id", pengembalianControllers.getPengembalianById);
+router.get("/pengembalianreport", upload.single('none'), pengembalianControllers.pengembalianReport)
 router.post(
   "/pengembalian",
   upload.single("none"),

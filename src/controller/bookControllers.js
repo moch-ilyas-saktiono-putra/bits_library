@@ -197,3 +197,5 @@ exports.deleteBookById = async (req, res) => {
     });
   }
 };
+
+// Stok Buku

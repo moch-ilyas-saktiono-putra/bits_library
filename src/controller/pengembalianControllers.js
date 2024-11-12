@@ -115,3 +115,94 @@ exports.getPengembalianById = async (req, res) => {
     });
   }
 };
+
+// Report Pengembalian
+exports.pengembalianReport = async (req, res) => {
+    const bulanIndonesia = [
+      "Januari",
+      "Februari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember",
+    ];
+  
+    const { tanggal_mulai, tanggal_akhir } = req.body;
+  
+    if (!tanggal_mulai) {
+      return res.status(404).json({
+        message: "Tanggal mulai required",
+      });
+    }
+  
+    let akhir = "";
+  
+    if (!tanggal_akhir) {
+      akhir = tanggal_mulai;
+    } else {
+      akhir = tanggal_akhir;
+    }
+  
+    try {
+      function setStartOfDay(date) {
+        const newDate = new Date(date);
+        newDate.setHours(0, 0, 0, 0);
+        return newDate;
+      }
+  
+      function setEndOfDay(date) {
+        const newDate = new Date(date);
+        newDate.setHours(23, 59, 59, 999);
+        return newDate;
+      }
+  
+      function capitalizeFirstLetter(kata) {
+        return kata.charAt(0).toUpperCase() + kata.slice(1);
+      }
+  
+      function parsing(tanggal) {
+        const part = tanggal.split(" ");
+        const hari = parseInt(part[0]);
+        const bulanCapitalized = capitalizeFirstLetter(part[1]);
+        const bulan = bulanIndonesia.indexOf(bulanCapitalized);
+        const tahun = parseInt(part[2]);
+  
+        const newDate = new Date(tahun, bulan, hari);
+        return newDate;
+      }
+  
+      const tanggalMulai = parsing(tanggal_mulai);
+      const tanggalAkhir = parsing(akhir);
+  
+      const startDate = setStartOfDay(tanggalMulai);
+      const endDate = setEndOfDay(tanggalAkhir);
+  
+      const report = await prisma.transaksi_pengembalian.findMany({
+        where: {
+          tanggal_pengembalian: {
+            gte: startDate,
+            lte: endDate,
+          },
+        },
+      });
+  
+      return res.json({
+        awal: startDate,
+        akhir: endDate,
+        report: report,
+      });
+    } catch (error) {
+      console.log("Error processing date", error);
+      return res.status(500).json({
+        message: "There was an error processing the date",
+        error: error.message,
+      });
+    }
+  };
+  

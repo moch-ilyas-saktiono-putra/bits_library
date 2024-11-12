@@ -122,7 +122,7 @@ exports.getPinjamanById = async (req, res) => {
 };
 
 // Laporan Peminjaman
-exports.peminjamanDailyReport = async (req, res) => {
+exports.peminjamanReport = async (req, res) => {
   const bulanIndonesia = [
     "Januari",
     "Februari",
