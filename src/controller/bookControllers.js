@@ -1,8 +1,8 @@
 // Library
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const path = require('path')
-const fs = require('fs')
+const path = require("path");
+const fs = require("fs");
 
 // Save Book
 exports.saveBook = async (req, res) => {
@@ -199,3 +199,32 @@ exports.deleteBookById = async (req, res) => {
 };
 
 // Stok Buku
+exports.getStokBuku = async (req, res) => {
+  const { judul_buku } = req.body;
+
+  if (!judul_buku) {
+    return res.status(400).json({
+      message: "Judul buku harus disertakan.",
+    });
+  }
+
+  try {
+    const jumlahBuku = await prisma.buku.findMany({
+      where: {
+        judul_buku: judul_buku,
+        status_pinjaman: false,
+      },
+    });
+
+    const stokBuku = jumlahBuku.length;
+    return res.status(200).json({
+      message: `Jumlah stok buku ${judul_buku} adalah ${stokBuku}`,
+    });
+  } catch (error) {
+    console.log("Error while checking book stock:", error);
+    return res.status(500).json({
+      message: "Terjadi kesalahan saat memeriksa stok buku.",
+      error: error.message,
+    });
+  }
+};

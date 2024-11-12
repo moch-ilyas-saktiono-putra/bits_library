@@ -24,6 +24,11 @@ const uploadImage = multer({ storage: fileStorage });
 // Book Routes
 router.get("/book", bookControllers.getAllBook);
 router.get("/book/:id", bookControllers.getBookById);
+router.get(
+  "/detailstokbuku",
+  upload.single("none"),
+  bookControllers.getStokBuku
+);
 router.post("/book", uploadImage.single("foto_buku"), bookControllers.saveBook);
 router.put(
   "/book/:id",
@@ -64,7 +69,11 @@ router.post(
 // Pengembalian routers
 router.get("/pengembalian", pengembalianControllers.getAllPengembalian);
 router.get("/pengembalian/:id", pengembalianControllers.getPengembalianById);
-router.get("/pengembalianreport", upload.single('none'), pengembalianControllers.pengembalianReport)
+router.get(
+  "/pengembalianreport",
+  upload.single("none"),
+  pengembalianControllers.pengembalianReport
+);
 router.post(
   "/pengembalian",
   upload.single("none"),
