@@ -47,6 +47,13 @@ router.put(
 router.delete("/member/:id", memberControllers.deleteMemberById);
 
 // Pinjam Routers
+router.get("/pinjam", pinjamControllers.getAllPinjaman);
+router.get("/pinjam/:id", pinjamControllers.getPinjamanById);
+router.get(
+  "/pinjamreport",
+  upload.single("none"),
+  pinjamControllers.peminjamanDailyReport
+);
 router.post(
   "/pinjam",
   upload.single("none"),

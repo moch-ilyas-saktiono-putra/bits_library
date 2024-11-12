@@ -12,7 +12,7 @@ model buku {
   judul_buku       String             @db.VarChar(255)
   pengarang        String?            @db.VarChar(255)
   penerbit         String?            @db.VarChar(255)
-  tahun_terbit     String?
+  tahun_terbit     String?            @db.VarChar(255)
   kategori         String?            @db.VarChar(100)
   isbn             String?            @db.VarChar(20)
   status_pinjaman  Boolean?           @default(false)
@@ -26,7 +26,7 @@ model member {
   alamat            String?            @db.VarChar(255)
   no_telepon        String?            @db.VarChar(20)
   email             String?            @unique(map: "email") @db.VarChar(100)
-  tanggal_bergabung DateTime?          @default(now()) @db.Date
+  tanggal_bergabung DateTime?          @default(dbgenerated("(curdate())")) @db.Date
   foto_member       String?            @db.VarChar(255)
   transaksi_pinjam  transaksi_pinjam[]
 }
@@ -44,7 +44,7 @@ model transaksi_pengembalian {
 model transaksi_pinjam {
   id_transaksi_pinjam    Int                      @id @default(autoincrement())
   id_member              Int?
-  nama_member            String?                  @db.VarChar(255) 
+  nama_member            String?                  @db.VarChar(255)
   id_buku                Int?
   judul_buku             String?                  @db.VarChar(255)
   tanggal_pinjam         DateTime?                @db.Date
