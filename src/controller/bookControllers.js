@@ -199,7 +199,7 @@ exports.deleteBookById = async (req, res) => {
 };
 
 // Stok Buku
-exports.getStokBuku = async (req, res) => {
+exports.getDetailStokBuku = async (req, res) => {
   const { judul_buku } = req.body;
 
   if (!judul_buku) {
@@ -224,6 +224,37 @@ exports.getStokBuku = async (req, res) => {
     console.log("Error while checking book stock:", error);
     return res.status(500).json({
       message: "Terjadi kesalahan saat memeriksa stok buku.",
+      error: error.message,
+    });
+  }
+};
+
+// Get All stok buku
+exports.getAllStokBuku = async (req, res) => {
+  try {
+    const stokBuku = await prisma.buku.groupBy({
+      by: ["judul_buku"],
+      _count: {
+        id_buku: true,
+      },
+      where: {
+        status_pinjaman: false,
+      },
+    });
+
+    const stokBukuFormatted = stokBuku.reduce((acc, item) => {
+      acc[item.judul_buku] = item._count.id_buku;
+      return acc;
+    }, {});
+
+    return res.status(200).json({
+      message: "Daftar stok buku yang tersedia",
+      data: stokBukuFormatted,
+    });
+  } catch (error) {
+    console.log("Error fetching book stock:", error);
+    return res.status(500).json({
+      message: "Terjadi kesalahan saat mengambil stok buku.",
       error: error.message,
     });
   }

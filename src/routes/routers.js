@@ -27,8 +27,9 @@ router.get("/book/:id", bookControllers.getBookById);
 router.get(
   "/detailstokbuku",
   upload.single("none"),
-  bookControllers.getStokBuku
+  bookControllers.getDetailStokBuku
 );
+router.get("/stokbuku", bookControllers.getAllStokBuku)
 router.post("/book", uploadImage.single("foto_buku"), bookControllers.saveBook);
 router.put(
   "/book/:id",
