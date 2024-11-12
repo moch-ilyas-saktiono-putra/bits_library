@@ -62,6 +62,8 @@ router.post(
 );
 
 // Pengembalian routers
+router.get("/pengembalian", pengembalianControllers.getAllPengembalian)
+router.get("/pengembalian/:id", pengembalianControllers.getPengembalianById)
 router.post(
   "/pengembalian",
   upload.single("none"),

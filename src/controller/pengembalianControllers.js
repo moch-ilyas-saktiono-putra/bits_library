@@ -54,6 +54,13 @@ exports.createPengembalian = async (req, res) => {
       data: { status_pinjam: false },
     });
 
+    const upateStatusBuku = await prisma.buku.update({
+      where: {
+        id_buku: Number(id_buku),
+      },
+      data: { status_pinjaman: false },
+    });
+
     return res.status(200).json({
       message: "Data pengembalian successfully created",
       data: createNotaPengembalian,
@@ -62,6 +69,48 @@ exports.createPengembalian = async (req, res) => {
     console.log("Error creating data", error);
     return res.status(500).json({
       message: "There was an error creating the data",
+      error: error.message,
+    });
+  }
+};
+
+// Get all pinjaman
+exports.getAllPengembalian = async (req, res) => {
+  try {
+    const pengembalianData = await prisma.transaksi_pengembalian.findMany();
+
+    return res.status(200).json({
+      message: "Pengembalian data successfully retreive",
+      pengembalianData,
+    });
+  } catch (error) {
+    console.log("Error retreiving data", error);
+    return res.status(500).json({
+      message: "There was an error retreiving pengembalian data",
+      error: error.message,
+    });
+  }
+};
+
+// Get pinjaman by id
+exports.getPengembalianById = async (req, res) => {
+  const pengembalianId = req.params.id;
+
+  try {
+    const detailPengembalian = await prisma.transaksi_pengembalian.findUnique({
+      where: {
+        id_transaksi_pengembalian: Number(pengembalianId),
+      },
+    });
+
+    return res.status(200).json({
+      message: "Detail pengembalian successfully retreive",
+      detailPengembalian,
+    });
+  } catch (error) {
+    console.log("Error retreiving detail data", error);
+    return res.status(500).json({
+      message: "There was an error retreiving detail pengembalian",
       error: error.message,
     });
   }

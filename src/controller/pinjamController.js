@@ -59,6 +59,13 @@ exports.createPeminjaman = async (req, res) => {
       },
     });
 
+    const upateStatusBuku = await prisma.buku.update({
+      where: {
+        id_buku: Number(id_buku),
+      },
+      data: { status_pinjaman: true },
+    });
+
     return res.status(200).json({
       message: "Peminjaman data successfully created",
       data: saveData,
@@ -139,23 +146,23 @@ exports.peminjamanDailyReport = async (req, res) => {
     });
   }
 
-  let akhir = ""
+  let akhir = "";
 
   if (!tanggal_akhir) {
-    akhir = tanggal_mulai
+    akhir = tanggal_mulai;
   } else {
-    akhir = tanggal_akhir
+    akhir = tanggal_akhir;
   }
 
   try {
     function setStartOfDay(date) {
-      const newDate = new Date(date); 
+      const newDate = new Date(date);
       newDate.setHours(0, 0, 0, 0);
       return newDate;
     }
-    
+
     function setEndOfDay(date) {
-      const newDate = new Date(date); 
+      const newDate = new Date(date);
       newDate.setHours(23, 59, 59, 999);
       return newDate;
     }
