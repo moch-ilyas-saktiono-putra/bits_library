@@ -7,6 +7,7 @@ const upload = multer();
 const bookControllers = require("../controller/bookControllers");
 const memberControllers = require("../controller/memberControllers");
 const pinjamControllers = require("../controller/pinjamController");
+const pengembalianControllers = require("../controller/pengembalianControllers");
 
 // Middleware Save Image
 const fileStorage = multer.diskStorage({
@@ -58,6 +59,13 @@ router.post(
   "/pinjam",
   upload.single("none"),
   pinjamControllers.createPeminjaman
+);
+
+// Pengembalian routers
+router.post(
+  "/pengembalian",
+  upload.single("none"),
+  pengembalianControllers.createPengembalian
 );
 
 module.exports = router;

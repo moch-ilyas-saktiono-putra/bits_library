@@ -114,6 +114,7 @@ exports.getPinjamanById = async (req, res) => {
   }
 };
 
+// Laporan Peminjaman
 exports.peminjamanDailyReport = async (req, res) => {
   const bulanIndonesia = [
     "Januari",
@@ -146,8 +147,6 @@ exports.peminjamanDailyReport = async (req, res) => {
     akhir = tanggal_akhir
   }
 
-  console.log(akhir)
-
   try {
     function setStartOfDay(date) {
       const newDate = new Date(date); 
@@ -173,7 +172,6 @@ exports.peminjamanDailyReport = async (req, res) => {
       const tahun = parseInt(part[2]);
 
       const newDate = new Date(tahun, bulan, hari);
-      console.log(newDate)
       return newDate;
     }
 
